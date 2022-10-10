@@ -14,9 +14,17 @@ function ExpenseForm() {
 
   const titleChangeHandler = (event) => {
     // setEnteredTitle(event.target.value);
+    //this is a bad approach since it depends on previous state of other inputs
+    //So if there is any counter in the form this will not show the right value
     setUserInput({
       ...userInput,
       enteredTitle: event.target.value, //adding all the user input and overriding only title
+    });
+    //Better way is this one
+    //Because of the scheduling of state this below way will ensure that 
+    //The prevState is always the current state passed as a param
+    setUserInput(() => {
+      return { ...prevState, enteredTitle: event.target.value };
     });
   };
   const amountChangeHandler = (event) => {
