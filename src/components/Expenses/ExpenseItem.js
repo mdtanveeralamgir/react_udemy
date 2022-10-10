@@ -7,6 +7,10 @@ function ExpenseItem(props) {
 
   const [title, setTitle] = useState(props.title);
 
+  function clickHandler(){
+    setTitle("Updated title");
+  }
+
   return (
     <Card className="expense-item">
       <ExpenseDate date={props.date} />
@@ -18,8 +22,6 @@ function ExpenseItem(props) {
     </Card>
   );
 }
-
-
 
 
 export default ExpenseItem;
