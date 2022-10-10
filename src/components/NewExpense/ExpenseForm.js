@@ -53,6 +53,9 @@ function ExpenseForm() {
     }
 
     console.log(expenseData);
+    setEnteredTitle('');
+    setEnteredAmount('');
+    setEnteredDate('');
   };
 
   return (
@@ -60,7 +63,7 @@ function ExpenseForm() {
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
-          <input type="text" onChange={titleChangeHandler} />
+          <input type="text" value={enteredTitle} onChange={titleChangeHandler} />
         </div>
         <div className="new-expense__control">
           <label>Amount</label>
@@ -69,6 +72,7 @@ function ExpenseForm() {
             min="0.01"
             step="0.01"
             onChange={amountChangeHandler}
+            value={enteredAmount} //this is called two way binding
           />
         </div>
         <div className="new-expense__control">
@@ -78,6 +82,7 @@ function ExpenseForm() {
             min="2022-09-09"
             max="2022-12-31"
             onChange={dateChangehandler}
+            value={enteredDate}
           />
         </div>
       </div>
