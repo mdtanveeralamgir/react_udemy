@@ -5,14 +5,16 @@ import ExpenseFilter from "./ExpenseFilter";
 import { useState } from "react";
 
 function Expenses(props) {
-  const [year, setYear] = useState("2020");
+  const [year, setYear] = useState("2022");
   let items = props.items;
 
-  const changeYear = (year) => {
-    setYear(year);
+  const filteredExpenses = props.items.filter(expense => expense.date.getFullYear().toString() === year);
+
+  const changeYear = (newYear) => {
+    setYear(newYear);
   };
 
-  const expenseItems = items.map((item) => (
+  const expenseItems = filteredExpenses.map((item) => (
     <ExpenseItem
       key={item.id}
       title={item.title}
@@ -21,12 +23,15 @@ function Expenses(props) {
     />
   ));
 
+  
+
   return (
     <div>
       <Card className="expenses">
-      <ExpenseFilter selected={year} onSelectYear={changeYear}/>
-      {expenseItems}
-      </Card>;
+        <ExpenseFilter selected={year} onSelectYear={changeYear} />
+        {expenseItems}
+      </Card>
+      ;
     </div>
   );
 }
