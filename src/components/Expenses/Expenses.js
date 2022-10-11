@@ -8,7 +8,9 @@ function Expenses(props) {
   const [year, setYear] = useState("2022");
   let items = props.items;
 
-  const filteredExpenses = props.items.filter(expense => expense.date.getFullYear().toString() === year);
+  const filteredExpenses = props.items.filter(
+    (expense) => expense.date.getFullYear().toString() === year
+  );
 
   const changeYear = (newYear) => {
     setYear(newYear);
@@ -23,13 +25,15 @@ function Expenses(props) {
     />
   ));
 
-  
-
   return (
     <div>
       <Card className="expenses">
         <ExpenseFilter selected={year} onSelectYear={changeYear} />
-        {expenseItems}
+        {filteredExpenses.length === 0 ? (
+          <p>No expenses found!</p>
+        ) : (
+          expenseItems
+        )}
       </Card>
       ;
     </div>
