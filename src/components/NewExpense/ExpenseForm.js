@@ -5,6 +5,7 @@ function ExpenseForm(props) {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
+  const [formState, setFormState] = useState("hide");
 
   //   const [userInput, setUserInput] = useState({
   //     enteredTitle: "",
@@ -57,10 +58,16 @@ function ExpenseForm(props) {
     setEnteredTitle("");
     setEnteredAmount("");
     setEnteredDate("");
+    hideFormWithoutSub();
   };
 
-  return (
-    <form onSubmit={submitHandler}>
+  const hideFormWithoutSub = () => {
+    const form = document.getElementById("newExpenseForm");
+    form.style.display = "none";
+    displayStatus();
+  };
+  const form = (
+    <form id="newExpenseForm" onSubmit={submitHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
@@ -92,10 +99,28 @@ function ExpenseForm(props) {
         </div>
       </div>
       <div className="new-expense__actions">
+        <button type="cancel" onClick={hideFormWithoutSub}>
+          Cancel
+        </button>
         <button type="submit">Add Expense</button>
       </div>
     </form>
   );
+
+  const displayStatus = () => {
+    setFormState((prev) => {
+      return prev === "hide" ? "block" : "hide";
+    });
+  };
+
+  const formValue =
+    formState === "hide" ? (
+      <button onClick={displayStatus}>Show form</button>
+    ) : (
+      form
+    );
+
+  return formValue ;
 }
 
 export default ExpenseForm;
