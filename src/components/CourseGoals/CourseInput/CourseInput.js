@@ -26,15 +26,14 @@ const CourseInput = (props) => {
 
   return (
     <form onSubmit={formSubmitHandler}>
-      <div className="form-control">
+    {/* `` (back tick) called template literal in js
+      inside `` js expression can be added
+      below the invalid class is being added dymanicly and invalid css class is defined in .css file
+     */}
+      <div className={`form-control ${!isValid ? 'invalid' : ''}`}>
         {/* Dymanicly change the value of label and input based on user's input */}
-        <label style={{ color: !isValid ? "red" : "black" }}>Course Goal</label>
-        <input
-          style={{
-            borderColor: !isValid ? "red" : "black",
-            background: !isValid ? "salmon" : "transparent",
-          }}
-          type="text"
+        <label>Course Goal</label>
+        <input type="text"
           onChange={goalInputChangeHandler}
         />
       </div>
