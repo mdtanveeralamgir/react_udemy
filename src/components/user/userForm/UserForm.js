@@ -52,7 +52,8 @@ function UserForm(props) {
   }
 
   return (
-    <div>
+    // Using JSX element instead of div
+    <Wrapper> 
       {error && <ErrorModal title={error.title} message={error.message} onOkay={errorHanlder}/> }
       <form onSubmit={submitHanlder}>
         <label>Name</label>
@@ -61,7 +62,7 @@ function UserForm(props) {
         <input type="text" value={userAge} onChange={ageChangeHandler} />
         <button type="submit">Add user</button>
       </form>
-    </div>
+    </Wrapper>
   );
 }
 

@@ -23,10 +23,11 @@ function App() {
   }
 
   return (
-    <div>
+    // Using fragment instead of div
+    <>
       <UserForm saveUser={onSubmitForm}/>
       <UserList items={users} />
-    </div>
+    </>
   );
 }
 
