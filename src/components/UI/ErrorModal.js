@@ -1,9 +1,14 @@
-import classes from './Error.module.css';
+import classes from "./Error.module.css";
+import ReactDOM from "react-dom";
+import React from "react";
 
-function ErrorModal(props) {
+const Backdrop = props => {
+  return <div className={classes.backdrop} onClick={props.onConfirm} />;
+};
+
+const ModalOverlay = props =>
+{
   return (
-    <div>
-    <div onClick={props.onOkay} className={classes.backdrop}></div>
     <div className={classes.modal}>
       <header className={classes.header}>
         <h2>{props.title}</h2>
@@ -12,10 +17,17 @@ function ErrorModal(props) {
         <p>{props.message}</p>
       </div>
       <footer className={classes.actions}>
-        <button onClick={props.onOkay}>Okay</button>
+        <button onClick={props.onConfirm}>Okay</button>
       </footer>
     </div>
-    </div>
+  );
+}
+function ErrorModal(props) {
+  return (
+    <>
+      {ReactDOM.createPortal(<Backdrop onConfirm={props.onOkay}/>, document.getElementById('backdrop-root'))}
+      {ReactDOM.createPortal(<ModalOverlay title={props.title} message={props.message} onConfirm={props.onOkay}/>, document.getElementById('overlay-root'))}
+    </>
   );
 }
 
