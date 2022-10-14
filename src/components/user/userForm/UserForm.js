@@ -1,65 +1,78 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ErrorModal from "../../UI/ErrorModal";
 import Wrapper from "../../Helpers/Wrapper";
 
 function UserForm(props) {
-  const [userName, setUserName] = useState("");
-  const [userAge, setUserAge] = useState("");
-  const [error, setError]  = useState('');
+  //Always returns an object
+  //Always has a current prop which connects to the current value of the input
+  //By default it's undefined
+  //after first run it will be the dom node
+  // in below case it will be <input /> node/element
+  //current value can be obtained nameInputRef.current.value
+  const nameInputRef = useRef();
+  const ageInputRef = useRef();
 
-  const nameChangeHandler = (event) => {
-    setUserName(event.target.value);
-  };
 
-  const ageChangeHandler = (event) => {
-    setUserAge(event.target.value);
-  };
+  const [error, setError] = useState("");
+
+
 
   const submitHanlder = (event) => {
     event.preventDefault();
-
+    const currentName = nameInputRef.current.value;
+    const currentAge = ageInputRef.current.value;
     const newUser = {
       id: Math.random().toString(),
-      name: userName,
-      age: userAge,
+      name: currentName,
+      age: currentAge,
     };
 
-    if(newUser.name === '' || newUser.age === '')
-    {
+    if (currentName === "" || currentAge === "") {
       setError({
         title: "Invalid input",
-        message: "Please fill out all the fields"
+        message: "Please fill out all the fields",
       });
       return;
     }
-    if(+newUser.age < 0)
-    {
-        setError({
-            title: "Invalid input",
-            message: "The age has to be a positive number"
-          });
+    if (+currentAge < 0) {
+      setError({
+        title: "Invalid input",
+        message: "The age has to be a positive number",
+      });
       return;
     }
 
-    setUserName("");
-    setUserAge("");
     props.saveUser(newUser);
+    //erase the input
+    nameInputRef.current.value = '';
+    ageInputRef.current.value = '';
   };
 
-  const errorHanlder = () => 
-  {
+  const errorHanlder = () => {
     setError(null);
-  }
+  };
 
   return (
     // Using JSX element instead of div
-    <Wrapper> 
-      {error && <ErrorModal title={error.title} message={error.message} onOkay={errorHanlder}/> }
+    <Wrapper>
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onOkay={errorHanlder}
+        />
+      )}
       <form onSubmit={submitHanlder}>
         <label>Name</label>
-        <input type="text" value={userName} onChange={nameChangeHandler} />
+        <input
+          type="text"
+          ref={nameInputRef}
+        />
         <label>Age</label>
-        <input type="text" value={userAge} onChange={ageChangeHandler} />
+        <input
+          type="text"
+          ref={ageInputRef}
+        />
         <button type="submit">Add user</button>
       </form>
     </Wrapper>
