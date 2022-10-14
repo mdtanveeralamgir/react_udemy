@@ -10,16 +10,7 @@ function App() {
   
   const onSubmitForm = (newUser) => 
   {
-    if(newUser.name === '' || newUser.age === '')
-    {
-      alert("please fill out all the fileds!");
-      return;
-    }
-    if(newUser.age < 0)
-    {
-      alert("age must be a positive number");
-      return;
-    }
+
 
     const structuredUser = {
       id: newUser.id,
