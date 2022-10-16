@@ -11,10 +11,22 @@ const Login = (props) => {
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+  //Refactoring code by validating form inputs once
+  //Instead of every keystroke run validation when user pause
   useEffect(() => {
-    setFormIsValid(
-      enteredEmail.includes("@") && enteredPassword.trim().length > 6
-    );
+    const identifier = setTimeout(() => {
+      //Runs this after every milisecond once user stops typing
+      setFormIsValid(
+        enteredEmail.includes("@") && enteredPassword.trim().length > 6
+      );
+    }, 500);
+
+    //Clean up process to make sure only one timer is running
+    //It will not run for the first execution
+    //But will run before every side effect execution starting from second
+    return () => {
+      clearTimeout(identifier);
+    };
   }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
