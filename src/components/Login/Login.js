@@ -24,9 +24,8 @@ const passwordReducer = (state, action) => {
   if (action.type === "USER_INPUT") {
     return { value: action.val, isValid: action.val.length > 6 };
   }
-  if(action.type === "INPUT_BLUR")
-  {
-    return {value: state.value, isValid: state.value.length > 6}
+  if (action.type === "INPUT_BLUR") {
+    return { value: state.value, isValid: state.value.length > 6 };
   }
   return { value: "", isValid: false };
 };
@@ -49,15 +48,18 @@ const Login = (props) => {
     isValid: false,
   });
 
-  
+  //In below useEffect the effect will run each time user type anything in the inputs
+  // using object destructuring we can only change run the useEffect only when isValid state changes in the useReducer
+
+  const { isValid: emailIsValid} = emailState; //Pulling out isValid value from emailState and give it an aliece "emailIsValid"
+  const { isValid: passwordIsValid} = passwordState; 
+
   //Refactoring code by validating form inputs once
   //Instead of every keystroke run validation when user pause
   useEffect(() => {
     const identifier = setTimeout(() => {
       //Runs this after every milisecond once user stops typing
-      setFormIsValid(
-        emailState.isValid && passwordState.isValid
-      );
+      setFormIsValid(emailIsValid && passwordIsValid);
     }, 500);
 
     //Clean up process to make sure only one timer is running
@@ -66,8 +68,7 @@ const Login = (props) => {
     return () => {
       clearTimeout(identifier);
     };
-  }, [emailState, passwordState]);
-
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
