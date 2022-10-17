@@ -49,14 +49,14 @@ const Login = (props) => {
     isValid: false,
   });
 
-  /*
+  
   //Refactoring code by validating form inputs once
   //Instead of every keystroke run validation when user pause
   useEffect(() => {
     const identifier = setTimeout(() => {
       //Runs this after every milisecond once user stops typing
       setFormIsValid(
-        enteredEmail.includes("@") && enteredPassword.trim().length > 6
+        emailState.isValid && passwordState.isValid
       );
     }, 500);
 
@@ -66,24 +66,24 @@ const Login = (props) => {
     return () => {
       clearTimeout(identifier);
     };
-  }, [enteredEmail, enteredPassword]);
-*/
+  }, [emailState, passwordState]);
+
 
   const emailChangeHandler = (event) => {
     // setEnteredEmail(event.target.value);
 
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
 
-    setFormIsValid(
-      emailState.isValid && passwordState.isValid
-    );
+    // setFormIsValid(
+    //   emailState.isValid && passwordState.isValid
+    // );
   };
 
   const passwordChangeHandler = (event) => {
     // setEnteredPassword(event.target.value);
     dispatchPassword({ type: "USER_INPUT", val: event.target.value });
 
-    setFormIsValid(passwordState.isValid && emailState.isValid);
+    // setFormIsValid(passwordState.isValid && emailState.isValid);
   };
 
   //A good plaace to use useReducer
