@@ -37,7 +37,8 @@ function App() {
     //It's only needed when the value of the Authcontext obj changes
     <AuthContext.Provider
       value={{ //The attribute has to be named value
-        isLoggedIn: isLoggedIn
+        isLoggedIn: isLoggedIn,
+        onLogout: logoutHandler //Passing the logoutHandler function down to app
       }}
     >
       <MainHeader onLogout={logoutHandler} />
