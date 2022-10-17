@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../Context/auth-context";
 
 //The reducer function doesn't need to interact with anything inside the component function
 //Hence we can put it outside the component
@@ -36,6 +37,7 @@ const Login = (props) => {
   // const [enteredPassword, setEnteredPassword] = useState("");
   // const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+  const ctx = useContext(AuthContext);
 
   //useReducer
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -51,8 +53,8 @@ const Login = (props) => {
   //In below useEffect the effect will run each time user type anything in the inputs
   // using object destructuring we can only change run the useEffect only when isValid state changes in the useReducer
 
-  const { isValid: emailIsValid} = emailState; //Pulling out isValid value from emailState and give it an aliece "emailIsValid"
-  const { isValid: passwordIsValid} = passwordState; 
+  const { isValid: emailIsValid } = emailState; //Pulling out isValid value from emailState and give it an aliece "emailIsValid"
+  const { isValid: passwordIsValid } = passwordState;
 
   //Refactoring code by validating form inputs once
   //Instead of every keystroke run validation when user pause
@@ -101,7 +103,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
+    ctx.onLogin(emailState.value, passwordState.value);
   };
 
   return (
