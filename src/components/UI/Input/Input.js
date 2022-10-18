@@ -1,16 +1,23 @@
 import classes from "./Input.module.css";
-import { useRef, useEffect } from "react";
+import React, { useRef, useImperativeHandle } from "react";
 
-function Input(props) {
+const Input = React.forwardRef((props, ref) => {
   const inputRef = useRef();
 
-  //Using useRef the input is focused on bootup (first load up)
-  //Only password will foucs since password is going to render after email input
-  //Not the behavior we want
-  useEffect(() => {
+  const activate = () => {
     inputRef.current.focus();
-  }, []);
+  };
 
+  //Returns an obj to make internal items accessable to outside
+  //In this case making activate function accessable to parent component
+  //This hook is used vary rarely
+  //The first param is the ref passed from parent component
+  //That ref is the ref points to the parent ref
+  useImperativeHandle(ref, () => {
+    return {
+      focus: activate,
+    };
+  });
   return (
     <>
       <div
@@ -30,6 +37,6 @@ function Input(props) {
       </div>
     </>
   );
-}
+});
 
 export default Input;
