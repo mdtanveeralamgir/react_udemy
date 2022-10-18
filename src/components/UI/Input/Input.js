@@ -1,7 +1,16 @@
-import Button from "../Button/Button";
 import classes from "./Input.module.css";
+import { useRef, useEffect } from "react";
 
 function Input(props) {
+  const inputRef = useRef();
+
+  //Using useRef the input is focused on bootup (first load up)
+  //Only password will foucs since password is going to render after email input
+  //Not the behavior we want
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <>
       <div
@@ -11,6 +20,7 @@ function Input(props) {
       >
         <label htmlFor={props.id}>{props.label}</label>
         <input
+          ref={inputRef}
           type={props.type}
           id={props.id}
           value={props.value}
