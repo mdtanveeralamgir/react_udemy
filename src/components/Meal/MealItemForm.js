@@ -2,32 +2,21 @@ import classes from "./MealItemForm.module.css";
 import InputForm from "../UI/InputForm";
 import AmountContext from "../Context/amount-context";
 
-import { useState, useContext, useRef } from "react";
+import { useContext, useState } from "react";
 
 const MealItemForm = (props) => {
-  const [amount, setAmount] = useState(1);
   const ctx = useContext(AmountContext);
-  const idRef = useRef();
+  const [amount, setAmount] = useState(+props.amount | 1);
+
   const amountChangeHandler = (event) => {
     setAmount(+event.target.value);
   };
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-
-    const intendedItems = {
-      id: idRef.current.value,
-      amount: amount,
-    };
-    const temp = ctx.mealItems;
-    temp.push(intendedItems);
-    ctx.mealItems = temp;
-    // console.log(ctx.mealItems);
-  };
+  // props.onAmountChange(amount);
 
   return (
-    <form className={classes.form} onSubmit={submitHandler}>
-      <input ref={idRef} type="hidden" value={props.id} />
+    <form className={classes.form} onSubmit={ctx.formSubmitHandler}>
+      <input type="hidden" value={props.id} />
       <InputForm
         type="number"
         label="Amount"
