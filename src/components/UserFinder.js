@@ -12,13 +12,19 @@ class UserFinder extends Component {
   constructor() {
     super();
     this.state = {
-      filteredUsers: DUMMY_USERS,
+      filteredUsers: [],
       searchTerm: "",
     };
   }
 
+  //This does not need any check of previous vs current state becasue this will run only once
+  //This will run only once during the mount
+componentDidMount(){
+    //Send HTTP request...
+    this.setState({filteredUsers: DUMMY_USERS});
+}
   //This will update everytime the state is changed and UserFinder class re-evaluated
-  //This will create an infinite loop
+  //without checking "prevState.searchTerm !== this.state.searchTerm" will create an infinite loop
   //Because everytime filteredUsers change it will re-render the UserFinder and will cause to change the filteredUsers again
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
