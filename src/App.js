@@ -10,22 +10,32 @@ import "./App.css";
  */
 function App() {
   const [showP, setShowP] = useState(false);
+  const [allowtoggle, setAllowToggle] = useState(false);
 
   console.log("app running");
   /*
-  * in Js only premitive values can be compared by ===
-  * false === false : true
-  * 'hi' === 'hi' : true
-  * {} === {} : false, because they are pointing to different memory location
-  * useCallback stores the object is a special place in react to overcome this comparison
-  */
+   * in Js only premitive values can be compared by ===
+   * false === false : true
+   * 'hi' === 'hi' : true
+   * {} === {} : false, because they are pointing to different memory location
+   * useCallback stores the object is a special place in react to overcome this comparison
+   * allowToggle is a dependency which ensure js closure works
+   * when js stores a function to compare with current function it needs to store all the dependencies 
+   * to compare the dependency also
+   */
   const onClickHandler = useCallback(() => {
-    setShowP((prev) => {
-      return !prev;
-    });
-  }, []);
-   //Like useEffect needs to pass the all dependencies as a array to useCallback
-   //Since setShowP is managed by react so this is not necessary in this case
+    if (allowtoggle) {
+      setShowP((prev) => {
+        return !prev;
+      });
+    }
+  }, [allowtoggle]);
+
+  const toggleParagraph = () => {
+    setAllowToggle(true);
+  };
+  //Like useEffect needs to pass the all dependencies as a array to useCallback
+  //Since setShowP is managed by react so this is not necessary in this case
   return (
     <div className="app">
       <h1>Hi there!</h1>
@@ -34,8 +44,9 @@ function App() {
        * because DemoOutput is a function and part of App return statement where state is being handled
        * But the paragraph inside DemoOutput will not change/re-evaluated since the props is not changing inside DemoOutput
        */}
-      <DemoOutput show={false} />
+      <DemoOutput show={showP} />
       <Button onClick={onClickHandler}>Toggle</Button>
+      <Button onClick={toggleParagraph}>Allow toggle</Button>
     </div>
   );
 }
