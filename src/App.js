@@ -20,7 +20,12 @@ function App() {
   return (
     <div className="app">
       <h1>Hi there!</h1>
-      <DemoOutput show={showP} />
+      {/*
+       * even if the changing state is not passed to the DemoOutput still the demo output will re-evaluated
+       * because DemoOutput is a function and part of App return statement where state is being handled
+       * But the paragraph inside DemoOutput will not change/re-evaluated since the props is not changing inside DemoOutput
+       */}
+      <DemoOutput show={false} />
       <Button onClick={onClickHandler}>Toggle</Button>
     </div>
   );
