@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Button from "./components/UI/Button/Button";
 import DemoOutput from "./components/Demo/DemoOutput";
 import "./App.css";
@@ -12,11 +12,20 @@ function App() {
   const [showP, setShowP] = useState(false);
 
   console.log("app running");
-  const onClickHandler = () => {
+  /*
+  * in Js only premitive values can be compared by ===
+  * false === false : true
+  * 'hi' === 'hi' : true
+  * {} === {} : false, because they are pointing to different memory location
+  * useCallback stores the object is a special place in react to overcome this comparison
+  */
+  const onClickHandler = useCallback(() => {
     setShowP((prev) => {
       return !prev;
     });
-  };
+  }, []);
+   //Like useEffect needs to pass the all dependencies as a array to useCallback
+   //Since setShowP is managed by react so this is not necessary in this case
   return (
     <div className="app">
       <h1>Hi there!</h1>
