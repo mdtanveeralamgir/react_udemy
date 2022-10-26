@@ -4,8 +4,6 @@ import { Component } from "react";
 
 import classes from "./Users.module.css";
 
-
-
 class Users extends Component {
   constructor() {
     super();
@@ -13,6 +11,12 @@ class Users extends Component {
       showUsers: true,
       anotherState: "nothing",
     };
+  }
+
+  componentDidUpdate() {
+    if (this.props.users.length === 0) {
+      throw new Error("No users provided!");
+    }
   }
   toggleUsersHandler() {
     //React does not override other states

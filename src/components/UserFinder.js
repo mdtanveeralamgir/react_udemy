@@ -1,14 +1,13 @@
 import { Fragment, Component } from "react";
 import UsersContext from "../store/users-context";
 import classes from "./UserFinder.module.css";
-
+import ErrorBoundary from "./ErrorBoundary";
 import Users from "./Users";
 
-
 class UserFinder extends Component {
-    //This way only one context can be initialized
-    // If there is more than one context needed then need to use userContext.provider
-    static contextType = UsersContext;
+  //This way only one context can be initialized
+  // If there is more than one context needed then need to use userContext.provider
+  static contextType = UsersContext;
   constructor() {
     super();
     this.state = {
@@ -19,10 +18,10 @@ class UserFinder extends Component {
 
   //This does not need any check of previous vs current state becasue this will run only once
   //This will run only once during the mount
-componentDidMount(){
+  componentDidMount() {
     //Send HTTP request...
-    this.setState({filteredUsers: this.context.users});
-}
+    this.setState({ filteredUsers: this.context.users });
+  }
   //This will update everytime the state is changed and UserFinder class re-evaluated
   //without checking "prevState.searchTerm !== this.state.searchTerm" will create an infinite loop
   //Because everytime filteredUsers change it will re-render the UserFinder and will cause to change the filteredUsers again
@@ -42,12 +41,14 @@ componentDidMount(){
 
   render() {
     return (
-        // its possible to use userContext.consumer wrap around the jsx
+      // its possible to use userContext.consumer wrap around the jsx
       <Fragment>
         <div className={classes.finder}>
           <input type="search" onChange={this.searchChangeHandler} />
         </div>
-        <Users users={this.state.filteredUsers} />
+        <ErrorBoundary>
+          <Users users={this.state.filteredUsers} />
+        </ErrorBoundary>
       </Fragment>
     );
   }
