@@ -1,14 +1,14 @@
 import { Fragment, Component } from "react";
+import UsersContext from "../store/users-context";
 import classes from "./UserFinder.module.css";
 
 import Users from "./Users";
-const DUMMY_USERS = [
-  { id: "u1", name: "Max" },
-  { id: "u2", name: "Manuel" },
-  { id: "u3", name: "Julie" },
-];
+
 
 class UserFinder extends Component {
+    //This way only one context can be initialized
+    // If there is more than one context needed then need to use userContext.provider
+    static contextType = UsersContext;
   constructor() {
     super();
     this.state = {
@@ -21,7 +21,7 @@ class UserFinder extends Component {
   //This will run only once during the mount
 componentDidMount(){
     //Send HTTP request...
-    this.setState({filteredUsers: DUMMY_USERS});
+    this.setState({filteredUsers: this.context.users});
 }
   //This will update everytime the state is changed and UserFinder class re-evaluated
   //without checking "prevState.searchTerm !== this.state.searchTerm" will create an infinite loop
@@ -29,7 +29,7 @@ componentDidMount(){
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchTerm !== this.state.searchTerm) {
       this.setState({
-        filteredUsers: DUMMY_USERS.filter((user) =>
+        filteredUsers: this.context.users.filter((user) =>
           user.name.includes(this.state.searchTerm)
         ),
       });
@@ -42,6 +42,7 @@ componentDidMount(){
 
   render() {
     return (
+        // its possible to use userContext.consumer wrap around the jsx
       <Fragment>
         <div className={classes.finder}>
           <input type="search" onChange={this.searchChangeHandler} />
