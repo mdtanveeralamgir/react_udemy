@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -8,12 +8,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //using async and await instead of then
-  async function fetchMoviesHandler() {
+  //Functions are obj and the below format of function will change each time a state changes
+  // function fetchmoviesHandler(){}
+  //Therefore the useEffect will reRender the fetchmoviesHandler each time a state change
+  //To prevent that it's better to use useCallback hook to prevent it comparing the changes unnecessary
+  //Below function does not have any external dependencies, fetch is a JS function, and all setStates do not needed
+  //to be added as react manages them by itself
+  const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("https://swapi.dev/api/film/");
+      const response = await fetch("https://swapi.dev/api/films/");
       if (!response.ok) {
         throw new Error(response.status + " something went wrong");
       }
@@ -32,7 +37,12 @@ function App() {
       setError(error.message);
     }
     setIsLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
+
   let content = <p>Movies not found</p>;
   if (movies.length > 0) {
     content = <MoviesList movies={movies} />;
