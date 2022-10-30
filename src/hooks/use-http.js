@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 
-const useHttp = (requestConfig, applyData) => {
+const useHttp = (applyData) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const sendRequest = async () => {
+  const sendRequest = useCallback(async (requestConfig) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -31,7 +31,13 @@ const useHttp = (requestConfig, applyData) => {
       setError(err.message || "Something went wrong!");
     }
     setIsLoading(false);
-  };
+  }, [applyData]); 
+  //Above 2 dependencies are also objects
+  //Hence we need to wrap them in useCallback hooks as well
+  //So instead of passing requestConfig param in useHttp it can be passed through sendRequest
+  //In that way the sendRequest will not depend on outside obj rather depend on it's own param
+  //And then it will not require to be added as dependencies
+  //Same think could be done for applyData function, pass it from fetchTasks in App component
 
   return {
     isLoading: isLoading,
