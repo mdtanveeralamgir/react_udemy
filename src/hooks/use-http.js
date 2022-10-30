@@ -1,10 +1,10 @@
 import { useState, useCallback } from "react";
 
-const useHttp = (applyData) => {
+const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const sendRequest = useCallback(async (requestConfig) => {
+  const sendRequest = useCallback(async (requestConfig, applyData) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -31,7 +31,7 @@ const useHttp = (applyData) => {
       setError(err.message || "Something went wrong!");
     }
     setIsLoading(false);
-  }, [applyData]); 
+  }, []); 
   //Above 2 dependencies are also objects
   //Hence we need to wrap them in useCallback hooks as well
   //So instead of passing requestConfig param in useHttp it can be passed through sendRequest
