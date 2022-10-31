@@ -56,6 +56,7 @@ const SimpleInput = () => {
           id="name"
           value={enteredName}
         />
+        {nameError && <p>Name must not be empty!!</p>}
       </div>
       <div className={emailInputClasses}>
         <label htmlFor="email">Your Email</label>
@@ -66,12 +67,10 @@ const SimpleInput = () => {
           id="email"
           value={enteredEmail}
         />
+        {emailError && <p>Enter a valid email!!</p>}
       </div>
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
-      </div>
-      <div>
-        {nameError && <p>Please enter a name, with at least 4 char!</p>}
       </div>
     </form>
   );
