@@ -1,57 +1,44 @@
-import { useState, useRef, useEffect } from "react";
-const SimpleInput = (props) => {
-  const nameInputRef = useRef();
-  const [enteredName, setEnteredName] = useState("");
-  const [nameError, setNameError] = useState(false);
-  const [enterEmail, setEnterEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [formIsValid, setFormIsValid] = useState(false); //Form is invalid if any input is invalid
+import useInput from "../hooks/use-input";
 
-  //Using useEffect to mark form is invalid if any input is invalid
-  useEffect(() => {
-    if (!nameError && !emailError) {
-      setFormIsValid(true);
-    } else {
-      setFormIsValid(false);
-    }
-  }, [nameError, emailError]);
+const SimpleInput = () => {
+  const {
+    inputValue: enteredName,
+    inputIsValid: enteredNameIsValid,
+    hasError: nameError,
+    inputChangeHandler: nameChangeHandler,
+    inputBlurHandler: nameBlurHandler,
+    reset: resetNameInput,
+  } = useInput(validateEnteredName);
+  const {
+    inputValue: enteredEmail,
+    inputIsValid: enteredEmailIsValid,
+    hasError: emailError,
+    inputChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmailInput,
+  } = useInput(validateEnteredEmail);
 
-  const validateEnteredName = (event = null) => {
-    const name = event ? event.target.value.trim() : enteredName.trim();
-    if (name.length < 1) {
-      setNameError(true);
-    } else if (nameInputRef.current.value.trim().length < 3) {
-      setNameError(true);
-    } else {
-      setNameError(false);
-    }
-  };
+  let formIsValid = false;
 
-  const validateEnteredEmail = (event = null) => {
-    const email = event ? event.target.value.trim() : enterEmail.trim();
-    const emailIncludesAt = email.toString().includes("@");
-    console.log(emailIncludesAt);
-    console.log(email);
-    if (email.length < 1 || !emailIncludesAt) {
-      setEmailError(true);
-    } else {
-      setEmailError(false);
-    }
-  };
+  if (enteredEmailIsValid && enteredNameIsValid) {
+    formIsValid = true;
+  }
 
-  const nameInputChangeHandler = (event) => {
-    setEnteredName(event.target.value.trim());
-    validateEnteredName(event); //Because of the react scheduling the value from DOM should be passed here
-  };
+  function validateEnteredName(value) {
+    return value.length >= 4;
+  }
 
-  const emailInputChangeHandler = (event) => {
-    setEnterEmail(event.target.value.trim());
-    validateEnteredEmail(event);
-  };
+  function validateEnteredEmail(value) {
+    const emailIncludesAt = value.includes("@");
+
+    return value.length > 1 && emailIncludesAt;
+  }
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
-    validateEnteredName();
-    validateEnteredEmail();
+
+    resetEmailInput();
+    resetNameInput();
   };
   const nameInputClasses = nameError ? "form-control invalid" : "form-control";
   const emailInputClasses = emailError
@@ -63,20 +50,21 @@ const SimpleInput = (props) => {
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
-          onChange={nameInputChangeHandler}
-          onBlur={validateEnteredName}
+          onChange={nameChangeHandler}
+          onBlur={nameBlurHandler}
           type="text"
           id="name"
+          value={enteredName}
         />
       </div>
       <div className={emailInputClasses}>
         <label htmlFor="email">Your Email</label>
         <input
-          onChange={emailInputChangeHandler}
-          onBlur={validateEnteredEmail}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
           type="email"
           id="email"
+          value={enteredEmail}
         />
       </div>
       <div className="form-actions">
