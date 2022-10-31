@@ -4,11 +4,7 @@ const SimpleInput = (props) => {
   const [enteredName, setEnteredName] = useState("");
   const [nameError, setNameError] = useState(false);
 
-  const nameInputChangeHandler = (event) => {
-    setEnteredName(event.target.value.trim());
-  };
-  const formSubmissionHandler = (event) => {
-    event.preventDefault();
+  const validateEnteredName = () => {
     if (enteredName.trim().length < 1) {
       setNameError(true);
     } else if (nameInputRef.current.value.trim().length < 3) {
@@ -18,6 +14,13 @@ const SimpleInput = (props) => {
     }
     console.log(enteredName);
   };
+  const nameInputChangeHandler = (event) => {
+    setEnteredName(event.target.value.trim());
+  };
+  const formSubmissionHandler = (event) => {
+    event.preventDefault();
+    validateEnteredName();
+  };
   const nameInputClasses = nameError ? "form-control invalid" : "form-control";
   return (
     <form onSubmit={formSubmissionHandler}>
@@ -26,6 +29,7 @@ const SimpleInput = (props) => {
         <input
           ref={nameInputRef}
           onChange={nameInputChangeHandler}
+          onBlur={validateEnteredName}
           type="text"
           id="name"
         />
