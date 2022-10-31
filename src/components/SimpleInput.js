@@ -4,8 +4,8 @@ const SimpleInput = (props) => {
   const [enteredName, setEnteredName] = useState("");
   const [nameError, setNameError] = useState(false);
 
-  const validateEnteredName = () => {
-    if (enteredName.trim().length < 1) {
+  const validateEnteredName = (name = enteredName.trim()) => {
+    if (name.length < 1) {
       setNameError(true);
     } else if (nameInputRef.current.value.trim().length < 3) {
       setNameError(true);
@@ -16,6 +16,7 @@ const SimpleInput = (props) => {
   };
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value.trim());
+    validateEnteredName(event.target.value.trim()); //Because of the react scheduling the value from DOM should be passed here
   };
   const formSubmissionHandler = (event) => {
     event.preventDefault();
