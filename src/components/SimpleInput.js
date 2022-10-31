@@ -1,8 +1,20 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 const SimpleInput = (props) => {
   const nameInputRef = useRef();
   const [enteredName, setEnteredName] = useState("");
   const [nameError, setNameError] = useState(false);
+  const [formIsValid, setFormIsValid] = useState(false); //Form is invalid if any input is invalid
+
+
+  //Using useEffect to mark form is invalid if any input is invalid
+  useEffect(() => {
+
+    if (!nameError) {
+      setFormIsValid(true);
+    } else {
+      setFormIsValid(false);
+    }
+  }, [nameError]);
 
   const validateEnteredName = (name = enteredName.trim()) => {
     if (name.length < 1) {
@@ -12,7 +24,7 @@ const SimpleInput = (props) => {
     } else {
       setNameError(false);
     }
-    console.log(enteredName);
+
   };
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value.trim());
@@ -23,6 +35,7 @@ const SimpleInput = (props) => {
     validateEnteredName();
   };
   const nameInputClasses = nameError ? "form-control invalid" : "form-control";
+
   return (
     <form onSubmit={formSubmissionHandler}>
       <div className={nameInputClasses}>
@@ -36,7 +49,7 @@ const SimpleInput = (props) => {
         />
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
       <div>
         {nameError && <p>Please enter a name, with at least 4 char!</p>}
