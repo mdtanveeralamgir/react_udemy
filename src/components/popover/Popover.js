@@ -11,25 +11,32 @@ const passwordRFequirements = [
   { id: 3, item: "At least one lower case letter." },
   { id: 4, item: "At least one number." },
 ];
-const validPassword = (password) => {
-  return (
-    password.length > 5 &&
-    password.length < 19 &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /\d/.test(password)
-  );
+
+const getMetRequId = (password) => {
+  let id = [];
+  if (password.length > 5 && password.length < 19) {
+    id.push(1);
+  }
+  if (/[A-Z]/.test(password)) {
+    id.push(2);
+  }
+  if (/[a-z]/.test(password)) {
+    id.push(3);
+  }
+  if (/\d/.test(password)) {
+    id.push(4);
+  }
+  return id;
 };
 function Popover(prop) {
   const [show, setShow] = useState(false);
   const [filteredPass, setFilteredPass] = useState(passwordRFequirements);
-  //   const [displayToolkit, setDisplayToolkit] = useState(classes.toolKitDisplay);
-  //   const [filteredPassChanged, setFilteredPassChanged] = useState(false);
   const target = useRef(null);
 
   useEffect(() => {
     if (prop.passVal.length > 0) {
-      if (prop.passVal.length > 5 && prop.passVal.length < 19) {
+      const metRequirements = getMetRequId(prop.passVal);
+      if (metRequirements.includes(1)) {
         setFilteredPass((prev) => {
           return prev.filter((item) => item.id !== 1);
         });
@@ -45,7 +52,7 @@ function Popover(prop) {
           }
         });
       }
-      if (/[A-Z]/.test(prop.passVal)) {
+      if (metRequirements.includes(2)) {
         setFilteredPass((prev) => {
           return prev.filter((item) => item.id !== 2);
         });
@@ -61,7 +68,7 @@ function Popover(prop) {
           }
         });
       }
-      if (/[a-z]/.test(prop.passVal)) {
+      if (metRequirements.includes(3)) {
         setFilteredPass((prev) => {
           return prev.filter((item) => item.id !== 3);
         });
@@ -77,7 +84,7 @@ function Popover(prop) {
           }
         });
       }
-      if (/\d/.test(prop.passVal)) {
+      if (metRequirements.includes(4)) {
         setFilteredPass((prev) => {
           return prev.filter((item) => item.id !== 4);
         });
@@ -90,7 +97,7 @@ function Popover(prop) {
           }
         });
       }
-      if (validPassword(prop.passVal)) {
+      if (metRequirements.length === passwordRFequirements.length) {
         setShow(false);
       } else {
         setShow(true);
@@ -102,16 +109,7 @@ function Popover(prop) {
   const displayToolkit = show ? "" : classes.toolKitDisplay;
   return (
     <>
-      {/* {console.log(filteredPass)} */}
-      <Button
-        className={classes.poperButton}
-        ref={target}
-        // onClick={() =>
-        //   setShow((prev) => {
-        //     return !prev;
-        //   })
-        // }
-      ></Button>
+      <Button className={classes.poperButton} ref={target}></Button>
       <Overlay target={target.current} show={show} placement="right">
         {(props) => (
           <Tooltip className={displayToolkit} id="overlay" {...props}>
