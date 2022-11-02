@@ -15,7 +15,8 @@ const passwordRFequirements = [
 function Popover(prop) {
   const [show, setShow] = useState(false);
   const [filteredPass, setFilteredPass] = useState(passwordRFequirements);
-  const [displayToolkit, setDisplayToolkit] = useState(classes.toolKitDisplay);
+//   const [displayToolkit, setDisplayToolkit] = useState(classes.toolKitDisplay);
+//   const [filteredPassChanged, setFilteredPassChanged] = useState(false);
   const target = useRef(null);
 
   useEffect(() => {
@@ -42,8 +43,10 @@ function Popover(prop) {
       }
       if (/[a-z]/.test(prop.passVal)) {
         setFilteredPass((prev) => {
+            console.log(prev);
           return prev.filter((item) => item.id !== 3);
         });
+
       } else if (!filteredPass.some((item) => item.id === 3)) {
         filteredPass.some((item) => console.log(typeof item.id));
         setFilteredPass((prev) => {
@@ -61,19 +64,20 @@ function Popover(prop) {
         });
       }
       setShow(true);
-      setDisplayToolkit("");
-    //   if (filteredPass.length === 0) {
-    //     setShow(false);
-    //     setDisplayToolkit(classes.toolKitDisplay);
-    //   } else {
-    //     setShow(true);
-    //     setDisplayToolkit("");
-    //   }
+    //   setDisplayToolkit("");
+      //   if (filteredPass.length === 0) {
+      //     setShow(false);
+      //     setDisplayToolkit(classes.toolKitDisplay);
+      //   } else {
+      //     setShow(true);
+      //     setDisplayToolkit("");
+      //   }
     } else {
       setShow(false);
-      setDisplayToolkit(classes.toolKitDisplay);
+    //   setDisplayToolkit(classes.toolKitDisplay);
     }
   }, [prop.passVal, filteredPass]);
+  const displayToolkit = show ? "" : classes.toolKitDisplay;
   return (
     <>
       {/* {console.log(filteredPass)} */}
