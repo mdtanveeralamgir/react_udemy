@@ -11,12 +11,20 @@ const passwordRFequirements = [
   { id: 3, item: "At least one lower case letter." },
   { id: 4, item: "At least one number." },
 ];
-
+const validPassword = (password) => {
+  return (
+    password.length > 5 &&
+    password.length < 19 &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /\d/.test(password)
+  );
+};
 function Popover(prop) {
   const [show, setShow] = useState(false);
   const [filteredPass, setFilteredPass] = useState(passwordRFequirements);
-//   const [displayToolkit, setDisplayToolkit] = useState(classes.toolKitDisplay);
-//   const [filteredPassChanged, setFilteredPassChanged] = useState(false);
+  //   const [displayToolkit, setDisplayToolkit] = useState(classes.toolKitDisplay);
+  //   const [filteredPassChanged, setFilteredPassChanged] = useState(false);
   const target = useRef(null);
 
   useEffect(() => {
@@ -25,58 +33,72 @@ function Popover(prop) {
         setFilteredPass((prev) => {
           return prev.filter((item) => item.id !== 1);
         });
-      } else if (!filteredPass.some((item) => item.id === 1)) {
-        filteredPass.some((item) => console.log(typeof item.id));
+      } else {
         setFilteredPass((prev) => {
-          return [...prev, { id: 1, item: "Length should be between 6 to 20" }];
+          if (!prev.some((item) => item.id === 1)) {
+            return [
+              ...prev,
+              { id: 1, item: "Length should be between 6 to 20" },
+            ];
+          } else {
+            return prev;
+          }
         });
       }
       if (/[A-Z]/.test(prop.passVal)) {
         setFilteredPass((prev) => {
           return prev.filter((item) => item.id !== 2);
         });
-      } else if (!filteredPass.some((item) => item.id === 2)) {
-        filteredPass.some((item) => console.log(typeof item.id));
+      } else {
         setFilteredPass((prev) => {
-          return [...prev, { id: 2, item: "At least one upper case letter." }];
+          if (!prev.some((item) => item.id === 2)) {
+            return [
+              ...prev,
+              { id: 2, item: "At least one upper case letter." },
+            ];
+          } else {
+            return prev;
+          }
         });
       }
       if (/[a-z]/.test(prop.passVal)) {
         setFilteredPass((prev) => {
-            console.log(prev);
           return prev.filter((item) => item.id !== 3);
         });
-
-      } else if (!filteredPass.some((item) => item.id === 3)) {
-        filteredPass.some((item) => console.log(typeof item.id));
+      } else {
         setFilteredPass((prev) => {
-          return [...prev, { id: 3, item: "At least one lower case letter." }];
+          if (!prev.some((item) => item.id === 3)) {
+            return [
+              ...prev,
+              { id: 3, item: "At least one lower case letter." },
+            ];
+          } else {
+            return prev;
+          }
         });
       }
       if (/\d/.test(prop.passVal)) {
         setFilteredPass((prev) => {
           return prev.filter((item) => item.id !== 4);
         });
-      } else if (!filteredPass.some((item) => item.id === 4)) {
-        filteredPass.some((item) => console.log(typeof item.id));
+      } else {
         setFilteredPass((prev) => {
-          return [...prev, { id: 4, item: "At least one number." }];
+          if (!prev.some((item) => item.id === 4)) {
+            return [...prev, { id: 4, item: "At least one number." }];
+          } else {
+            return prev;
+          }
         });
       }
-      setShow(true);
-    //   setDisplayToolkit("");
-      //   if (filteredPass.length === 0) {
-      //     setShow(false);
-      //     setDisplayToolkit(classes.toolKitDisplay);
-      //   } else {
-      //     setShow(true);
-      //     setDisplayToolkit("");
-      //   }
+      if (validPassword(prop.passVal)) {
+        setShow(false);
+      } else {
+        setShow(true);
+      }
     } else {
       setShow(false);
-    //   setDisplayToolkit(classes.toolKitDisplay);
     }
-  }, [prop.passVal, filteredPass]);
+  }, [prop.passVal]);
   const displayToolkit = show ? "" : classes.toolKitDisplay;
   return (
     <>
