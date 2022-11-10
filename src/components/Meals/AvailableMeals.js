@@ -3,38 +3,13 @@ import Card from "../UI/Card";
 import MealItem from "./MealItem/MealItem";
 import { useState, useEffect } from "react";
 
-const DUMMY_MEALS = [
-  {
-    id: "m1",
-    name: "Sushi",
-    description: "Finest fish and veggies",
-    price: 22.99,
-  },
-  {
-    id: "m2",
-    name: "Schnitzel",
-    description: "A german specialty!",
-    price: 16.5,
-  },
-  {
-    id: "m3",
-    name: "Barbecue Burger",
-    description: "American, raw, meaty",
-    price: 12.99,
-  },
-  {
-    id: "m4",
-    name: "Green Bowl",
-    description: "Healthy...and green...",
-    price: 18.99,
-  },
-];
-
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchMeals = async () => {
+      setIsLoading(true);
       const response = await fetch(
         "https://react-http-9c6c6-default-rtdb.firebaseio.com/meals.json"
       );
@@ -50,28 +25,10 @@ const AvailableMeals = () => {
       }
 
       setMeals(fetchedMeals);
+      setIsLoading(false);
     };
     fetchMeals();
   }, []);
-  // async function fetchMealshandler() {
-  //   const response = await fetch(
-  //     "https://react-http-9c6c6-default-rtdb.firebaseio.com/meals.json"
-  //   );
-  //   const data = await response.json();
-  //   let fetchedMeals = [];
-  //   for (const mealKey in data) {
-  //     fetchedMeals.push({
-  //       id: data[mealKey].id,
-  //       name: data[mealKey].name,
-  //       description: data[mealKey].description,
-  //       price: data[mealKey].price,
-  //     });
-  //   }
-
-  //   setMeals(fetchedMeals);
-  // }
-
-  // fetchMealshandler();
 
   const mealsList = meals.map((meal) => (
     <MealItem
@@ -82,10 +39,16 @@ const AvailableMeals = () => {
       price={meal.price}
     />
   ));
+
+  const content = isLoading ? (
+    <p className={classes.loading}>Loading...</p>
+  ) : (
+    mealsList
+  );
   return (
     <section className={classes.meals}>
       <Card>
-        <ul>{mealsList}</ul>
+        <ul>{content}</ul>
       </Card>
     </section>
   );

@@ -6,7 +6,7 @@ import CartContext from "../../store/cart-context";
 const HeaderCartButton = (props) => {
   const [btnIsHighlighted, setButtonIsHighlighted] = useState(false);
   const ctx = useContext(CartContext);
-  const {items} = ctx;
+  const { items } = ctx;
   //Reduce an array to a single number
   //Initially the curNumber is 0 as passed to the second argu
   // Then each item's amount will be added to the curNumber
@@ -18,9 +18,8 @@ const HeaderCartButton = (props) => {
     btnIsHighlighted ? classes.bump : ""
   }`;
 
-  
   useEffect(() => {
-    if(ctx.items.length ===0){
+    if (ctx.items.length === 0) {
       return;
     }
     setButtonIsHighlighted(true);
@@ -28,10 +27,10 @@ const HeaderCartButton = (props) => {
       setButtonIsHighlighted(false);
     }, 300);
 
-    return()=>{
+    return () => {
       clearTimeout(timer);
     };
-  }, [items]);
+  }, [items, ctx.items.length]);
   return (
     <button className={btnClasses} onClick={props.onClick}>
       <span className={classes.icon}>
