@@ -39,6 +39,7 @@ const Cart = (props) => {
 
     setIsSubmitting(false);
     setDidSubmit(true);
+    cartCtx.clearCart();
   };
 
   const cartItems = (
@@ -83,14 +84,16 @@ const Cart = (props) => {
     </>
   );
 
-const isSubmittingModalContent = <p>Sending order data...</p>;
-const didSubmittingModalContent = <p>Successfully sent order!</p>;
+  const isSubmittingModalContent = <p>Sending order data...</p>;
+  const didSubmittingModalContent = <p>Successfully sent order!</p>;
 
-  return <Modal onCartClose={props.onCloseCart}>
-    {!isSubmitting && !didSubmit && cartModalContent}
-    {isSubmitting && isSubmittingModalContent}
-    {!isSubmitting && didSubmit && didSubmittingModalContent}
-  </Modal>;
+  return (
+    <Modal onCartClose={props.onCloseCart}>
+      {!isSubmitting && !didSubmit && cartModalContent}
+      {isSubmitting && isSubmittingModalContent}
+      {!isSubmitting && didSubmit && didSubmittingModalContent}
+    </Modal>
+  );
 };
 
 export default Cart;
