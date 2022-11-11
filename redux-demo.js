@@ -9,21 +9,31 @@ const redux = require("redux");
 * and it must return a new state obj
 
 */
-const counterReducer = (state = {counter:0}, action) => {
-  return {
-    counter: state.counter + 1,
-  };
+const counterReducer = (state = { counter: 0 }, action) => {
+  if (action.type === "INCREMENT") {
+    return {
+      counter: state.counter + 1,
+    };
+  }
+  if (action.type === "DECREMENT") {
+    return {
+      counter: state.counter - 1,
+    };
+  }
+
+  return state;
 };
 
 const store = redux.createStore(counterReducer);
 
 const counterSubscriber = () => {
-    const latestState = store.getState();
-    console.log(latestState);
-}
+  const latestState = store.getState();
+  console.log(latestState);
+};
 
 //whenever the data of state has changed the function pass to the subscribe will execute
 store.subscribe(counterSubscriber);
 
 //Create and dispatch an action
-store.dispatch({type: "INCREMENT"})
+store.dispatch({ type: "INCREMENT" });
+store.dispatch({ type: "DECREMENT" });
