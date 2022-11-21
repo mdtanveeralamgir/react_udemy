@@ -1,6 +1,7 @@
 import classes from "./Counter.module.css";
-//
+
 import { useSelector, useDispatch } from "react-redux";
+import { counterActions } from "../store/index";
 
 const Counter = () => {
   const dispatch = useDispatch();
@@ -9,17 +10,21 @@ const Counter = () => {
   const show = useSelector((state) => state.showCounter);
 
   const incrementHandler = () => {
-    dispatch({ type: "INCREMENT" });
+    dispatch(counterActions.increment());
   };
   const incrementByFiveHandler = () => {
-    dispatch({ type: "INCREMENT_BY", value: 5 });
+    //If only the value is passed then toolkit will create an obj like this:
+    //{type: UNIQUE_IDENTIFIER, payload: 5}
+    //The name payload is given by toolkit
+    //And in the slice we need to use payload key
+    dispatch(counterActions.incrementBy(5));
   };
   const decrementHandler = () => {
-    dispatch({ type: "DECREMENT" });
+    dispatch(counterActions.decrement());
   };
 
   const toggleCounterHandler = () => {
-    dispatch({type: "TOGGLE"});
+    dispatch(counterActions.toggleCounter());
   };
 
   return (
