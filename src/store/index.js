@@ -25,6 +25,19 @@ const counterSlice = createSlice({
   },
 });
 
+const authSlice = createSlice({
+  name: "authentication",
+  initialState: { isAuthenticated: false },
+  reducers: {
+    login(state) {
+      state.isAuthenticated = true;
+    },
+    logout(state) {
+      state.isAuthenticated = false;
+    },
+  },
+});
+
 // const counterReducer = (state = { counter: 0, showCounter: true }, action) => {
 //   if (action.type === "INCREMENT") {
 //     return { ...state, counter: state.counter + 1 };
@@ -42,11 +55,12 @@ const counterSlice = createSlice({
 // };
 
 const store = configureStore({
-  //If we have multiple Slicer.reducer
-  // reducer: {counter: counterSlice.reducer}
-  reducer: counterSlice.reducer,
+  //if ther eis only one reducer
+  // reducer: counterSlice.reducer,
+  reducer: { counter: counterSlice.reducer, auth: authSlice.reducer },
 });
 
 //This gives the access to functions (increment, decrement, ...)
 export const counterActions = counterSlice.actions;
+export const authActions = authSlice.actions;
 export default store;
