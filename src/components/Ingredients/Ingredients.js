@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 
 import IngredientForm from "./IngredientForm";
 import Search from "./Search";
@@ -44,13 +44,28 @@ function Ingredients() {
         ]);
       });
   };
+  const removeIngredientHandler = (ingredientId) => {
+    fetch(
+      `https://react-http-9c6c6-default-rtdb.firebaseio.com/fruits/${ingredientId}.json`,
+      {
+        method: "DELETE",
+      }
+    ).then((response) => {
+      setUserIngredients((prev) =>
+        prev.filter((ingredient) => ingredient.id !== ingredientId)
+      );
+    });
+  };
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
         <Search onLoadIngredients={filteredIngredientsHandler} />
-        <IngredientList ingredients={userIngredients} onRemoveItem={() => {}} />
+        <IngredientList
+          ingredients={userIngredients}
+          onRemoveItem={removeIngredientHandler}
+        />
       </section>
     </div>
   );
